@@ -17,30 +17,26 @@ This is a Remotion project configured for generating vertical (TikTok/Reels/Shor
 
 ## How to Use
 
-### 1. Transcribe Audio (Generate Subtitles)
+### 1. Auto Video Generation Workflow (Recommended)
 
-Put your target audio file into `public/audio/` (e.g. `技術のうち.mp3`).
+You can ask the AI Assistant (e.g. Gemini, Cursor) to generate the video for you automatically by using the `/auto-video` workflow command:
+`> /auto-video 「ウサギとカメ」の動画を作ってください`
 
-If you've added new audio, run the transcription script to generate the Whisper JSON:
-```console
-node scripts/transcribe.mjs
-```
-*(Note: The script is currently configured to parse `技術のうち.mp3` and output `技術のうち.json`. If you want to use a different file, adjust the paths inside `scripts/transcribe.mjs` first.)*
+The AI will:
+1. Generate the narrative script
+2. Synthesize audio using **VOICEVOX** (e.g., Shikoku Metan)
+3. Transcribe and sync the audio perfectly using **Whisper.cpp** into JSON
+4. Generate AI Background imagery
+5. Configure the timeline automatically
 
-### 2. Preview the Video
+*(Note: The generated audio (`story.mp3`), subtitles (`story.json`), and images are intentionally added to `.gitignore`. They are intermediate output files that can be regenerated on the fly and should not be checked into Git to keep the repository lightweight.)*
 
-Start the Remotion Studio in your browser:
-```console
-npm run dev
-```
-In the browser, select the `CaptionedVideo` composition. It will automatically load the audio, background images, and synchronize the text to the timings produced by the JSON file.
-
-### 3. Render the Video to MP4
-
-Once you are satisfied with the preview, render it out to an MP4 file:
-```console
-npm run build
-```
+### 2. Manual Generation
+If you want to manually generate the assets instead:
+- Run the voice generation: `node scripts/generate_story_audio.mjs`
+- Run the Whisper transcription script: `node scripts/transcribe.mjs`
+- Start the Remotion Studio in your browser: `npm run dev`
+- To export the video as an MP4: `npm run build`
 
 ## AI Agent Integration
 

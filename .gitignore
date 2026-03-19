@@ -14,3 +14,11 @@ whisper.cpp.zip
 # Transcribing intermediate files
 public/temp.wav
 public/**/*.wav
+
+# Auto-generated AI assets (Do not push intermediate files)
+public/audio/temp_story/
+public/audio/story.*
+public/images/[0-9]*.png
+
+# Auto-generated scripts by workflow (Do not push)
+scripts/generate_story_audio.mjs

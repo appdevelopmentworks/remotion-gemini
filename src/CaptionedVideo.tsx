@@ -3,8 +3,8 @@ import { AbsoluteFill, Audio, Img, Sequence, staticFile, useDelayRender, useVide
 import type { Caption, TikTokPage } from "@remotion/captions";
 import { CaptionPage } from "./CaptionPage";
 
-const SWITCH_CAPTIONS_EVERY_MS = 2500; // Combine into comfortable readable blocks
-const TIGER_IMAGES = Array.from({ length: 7 }, (_, i) => `images/tiger${i + 1}.jpeg`);
+const SWITCH_CAPTIONS_EVERY_MS = 2500;
+const STORY_IMAGES = ["images/1.png", "images/2.png", "images/3.png", "images/4.png"];
 
 export const CaptionedVideo: React.FC = () => {
   const [captions, setCaptions] = useState<Caption[] | null>(null);
@@ -14,7 +14,7 @@ export const CaptionedVideo: React.FC = () => {
 
   const fetchCaptions = useCallback(async () => {
     try {
-      const response = await fetch(staticFile("audio/技術のうち.json"));
+      const response = await fetch(staticFile("audio/story.json"));
       const data = await response.json();
       setCaptions(data);
       continueRender(handle);
@@ -84,15 +84,15 @@ export const CaptionedVideo: React.FC = () => {
   }
 
   // Assign images evenly across the total video duration
-  const imageDurationFrames = Math.ceil(durationInFrames / TIGER_IMAGES.length);
+  const imageDurationFrames = Math.ceil(durationInFrames / STORY_IMAGES.length);
 
   return (
     <AbsoluteFill style={{ backgroundColor: "black" }}>
       {/* Play Audio in background */}
-      <Audio src={staticFile("audio/技術のうち.mp3")} />
+      <Audio src={staticFile("audio/story.mp3")} />
 
       {/* Background Images loop */}
-      {TIGER_IMAGES.map((imgSrc, i) => (
+      {STORY_IMAGES.map((imgSrc, i) => (
         <Sequence
           key={imgSrc}
           from={i * imageDurationFrames}
@@ -104,7 +104,7 @@ export const CaptionedVideo: React.FC = () => {
               width: "100%", 
               height: "100%", 
               objectFit: "cover",
-              filter: "brightness(0.35) contrast(1.1)", // Darken the background to make captions readable
+              filter: "brightness(0.5) contrast(1.1)", // Darken the background to make captions readable
             }} 
           />
         </Sequence>
