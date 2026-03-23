@@ -15,10 +15,32 @@ whisper.cpp.zip
 public/temp.wav
 public/**/*.wav
 
-# Auto-generated AI assets (Do not push intermediate files)
-public/audio/temp_story/
+# -------------------------------------------------------
+# public/ フォルダー内の素材ファイル（Push不要）
+# -------------------------------------------------------
+
+# CM動画素材 (public/videos/)
+public/videos/
+
+# 生成音声ファイル (public/audio/) - silence.mp3 は除く
 public/audio/story.*
-public/images/[0-9]*.png
+public/audio/temp_story/
+public/audio/*.mp3
+!public/audio/silence.mp3
+public/audio/*.json
+public/audio/*.txt
+public/audio/*.wav
+
+# 生成画像ファイル (public/images/)
+public/images/
 
 # Auto-generated scripts by workflow (Do not push)
 scripts/generate_story_audio.mjs
+
+# 一時ファイル・デバッグスクリプト
+get_video_durations.mjs
+get_video_durations.js
+durations_precise.js
+durations_simple.js
+fps_check.js
+dimensions_check.js
