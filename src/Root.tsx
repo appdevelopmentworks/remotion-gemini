@@ -6,6 +6,11 @@ import {
   combinedCMCalculateMetadata,
   combinedCMDefaultProps,
 } from "./CombinedCM";
+import {
+  SoraBye,
+  soraByeCalculateMetadata,
+  soraByeDefaultProps,
+} from "./SoraBye";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -27,6 +32,16 @@ export const RemotionRoot: React.FC = () => {
         height={704}
         defaultProps={combinedCMDefaultProps}
         calculateMetadata={combinedCMCalculateMetadata}
+      />
+      <Composition
+        id="SoraBye"
+        component={SoraBye}
+        durationInFrames={1}
+        fps={30}
+        width={1280}
+        height={720}
+        defaultProps={soraByeDefaultProps}
+        calculateMetadata={soraByeCalculateMetadata}
       />
     </>
   );

@@ -3,44 +3,75 @@ dist
 .DS_Store
 .env
 
-# Ignore the output video from Git but not videos you import into src/.
-out
-out/
+# -------------------------------------------------------
+# Remotion レンダリング出力
+# -------------------------------------------------------
 
-# Whisper.cpp local installation and models
+# out/ フォルダ（レンダリング済み動画）
+out/
+# ルート直下に出力された mp4 ファイル
+/*.mp4
+
+# -------------------------------------------------------
+# Whisper.cpp ローカルインストール
+# -------------------------------------------------------
 whisper.cpp/
 whisper.cpp.zip
 
-# Transcribing intermediate files
+# -------------------------------------------------------
+# 文字起こし中間ファイル
+# -------------------------------------------------------
 public/temp.wav
 public/**/*.wav
 
 # -------------------------------------------------------
-# public/ フォルダー内の素材ファイル（Push不要）
+# public/ 素材ファイル（Push不要 / clone時はフォルダ構造のみ再現）
 # -------------------------------------------------------
 
-# CM動画素材 (public/videos/)
-public/videos/
+# 動画素材 (public/videos/) - .gitkeep のみ追跡
+public/videos/*
+!public/videos/.gitkeep
 
-# 生成音声ファイル (public/audio/) - silence.mp3 は除く
-public/audio/story.*
-public/audio/temp_story/
-public/audio/*.mp3
+# 音声ファイル (public/audio/) - .gitkeep と silence.mp3 のみ追跡
+public/audio/*
+!public/audio/.gitkeep
 !public/audio/silence.mp3
-public/audio/*.json
-public/audio/*.txt
-public/audio/*.wav
+public/audio/temp_story/*
+!public/audio/temp_story/.gitkeep
 
-# 生成画像ファイル (public/images/)
-public/images/
+# 画像ファイル (public/images/) - .gitkeep のみ追跡
+public/images/*
+!public/images/.gitkeep
 
-# Auto-generated scripts by workflow (Do not push)
-scripts/generate_story_audio.mjs
-
-# 一時ファイル・デバッグスクリプト
+# -------------------------------------------------------
+# デバッグ・調査用スクリプト（ルート直下）
+# -------------------------------------------------------
+check_audio.mjs
+check_duration.mjs
+get_durations.mjs
 get_video_durations.mjs
 get_video_durations.js
 durations_precise.js
 durations_simple.js
 fps_check.js
 dimensions_check.js
+
+# デバッグ出力テキスト
+durations.txt
+durations_output.txt
+
+# TTS テスト出力
+test.mp3
+
+# -------------------------------------------------------
+# scripts/ 内の自動生成・環境依存スクリプト（Push不要）
+# -------------------------------------------------------
+# ワークフローで自動生成されるスクリプト
+scripts/generate_story_audio.mjs
+scripts/concat.mjs
+
+# 環境依存の絶対パスを含むスクリプト
+scripts/copy_images.mjs
+
+# TTS テスト用スクリプト
+scripts/test_tts.mjs
