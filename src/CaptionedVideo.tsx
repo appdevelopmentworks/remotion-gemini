@@ -1,171 +1,408 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { AbsoluteFill, Audio, Sequence, staticFile, useDelayRender, useVideoConfig, spring, useCurrentFrame, interpolate } from "remotion";
+import {
+  AbsoluteFill,
+  Audio,
+  Img,
+  Sequence,
+  interpolate,
+  spring,
+  staticFile,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
 
-interface Caption {
-  text: string;
-  startMs: number;
-  endMs: number;
-}
 
-// Slide 1: Timeline
-const Timeline: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) => {
-  const progress = spring({ frame, fps, config: { damping: 200 } });
+
+// -------------------------------------------------------
+// Slide components (7 slides for iceberg video)
+// -------------------------------------------------------
+
+// Slide 0: タイトル「氷山は90%が水中に隠れている」
+const SlideTitle: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) => {
+  const spr = spring({ frame, fps, config: { damping: 200 } });
+  const titleY = interpolate(spr, [0, 1], [60, 0]);
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%", padding: "0 100px" }}>
-      <div style={{ fontSize: 90, fontWeight: "bold", color: "white", marginBottom: 120 }}>南極条約の歴史</div>
-      <div style={{ position: "relative", width: 8, height: 800 * progress, background: "rgba(255,255,255,0.3)", borderRadius: 4 }}>
-        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 800 * progress, background: "white", borderRadius: 4 }} />
-        
-        {/* 1959 */}
-        <div style={{ position: "absolute", top: 150, left: 60, opacity: progress, width: 600 }}>
-          <div style={{ fontSize: 60, color: "#99f6ff", fontWeight: "bold", whiteSpace: "nowrap" }}>1959年12月1日</div>
-          <div style={{ fontSize: 45, color: "white", marginTop: 10, whiteSpace: "nowrap" }}>ワシントンで採択</div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        width: "100%",
+        height: "100%",
+        paddingBottom: 160,
+        gap: 40,
+      }}
+    >
+      <div
+        style={{
+          background: "linear-gradient(135deg, rgba(0,40,80,0.85) 0%, rgba(0,80,140,0.85) 100%)",
+          border: "3px solid rgba(100,220,255,0.6)",
+          borderRadius: 32,
+          padding: "50px 70px",
+          opacity: spr,
+          transform: `translateY(${titleY}px)`,
+          maxWidth: "90%",
+          textAlign: "center",
+        }}
+      >
+        <div style={{ fontSize: 56, fontWeight: "900", color: "#fff", lineHeight: 1.35, marginBottom: 20 }}>
+          🧊 水面上はわずか
         </div>
-        <div style={{ position: "absolute", top: 165, left: -16, width: 40, height: 40, background: "#99f6ff", borderRadius: "50%", border: "6px solid #050a10" }} />
-        
-        {/* 1961 */}
-        {progress > 0.6 && (
-          <>
-            <div style={{ position: "absolute", top: 550, left: 60, opacity: (progress - 0.6) / 0.4, width: 600 }}>
-              <div style={{ fontSize: 60, color: "#99f6ff", fontWeight: "bold", whiteSpace: "nowrap" }}>1961年6月23日</div>
-              <div style={{ fontSize: 45, color: "white", marginTop: 10, whiteSpace: "nowrap" }}>条約が正式に発効</div>
-            </div>
-            <div style={{ position: "absolute", top: 565, left: -16, width: 40, height: 40, background: "#99f6ff", borderRadius: "50%", border: "6px solid #050a10" }} />
-          </>
-        )}
+        <div
+          style={{
+            fontSize: 130,
+            fontWeight: "900",
+            color: "#4de8ff",
+            lineHeight: 1,
+            textShadow: "0 0 40px rgba(77,232,255,0.8)",
+          }}
+        >
+          10%
+        </div>
+        <div style={{ fontSize: 50, color: "rgba(200,240,255,0.9)", marginTop: 10 }}>
+          残り90%は海中に眠る
+        </div>
       </div>
     </div>
   );
 };
 
-
-// Slide 2: Purpose
-const Purpose: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) => {
-  const spr = (d: number) => spring({ frame, fps, delay: d, config: { damping: 200 } });
+// Slide 1: カービング
+const SlideCalving: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) => {
+  const spr = (delay: number) => spring({ frame, fps, delay, config: { damping: 200 } });
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 100, width: "100%" }}>
-      <div style={{ fontSize: 90, fontWeight: "bold", color: "white" }}>主な目的</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 80, width: "90%" }}>
-        <div style={{ background: "rgba(255,255,255,0.05)", padding: "50px 40px", borderRadius: 30, border: "3px solid #99f6ff", opacity: spr(0), transform: `translateY(${(1-spr(0))*50}px)` }}>
-          <div style={{ fontSize: 55, color: "#99f6ff", fontWeight: "bold", marginBottom: 15 }}>🕊️ 平和的利用</div>
-          <div style={{ fontSize: 40, color: "white", lineHeight: 1.4 }}>軍事目的の使用を全面禁止</div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        width: "100%",
+        height: "100%",
+        paddingBottom: 140,
+        gap: 30,
+      }}
+    >
+      <div
+        style={{
+          opacity: spr(0),
+          transform: `scale(${interpolate(spr(0), [0, 1], [0.85, 1])})`,
+          textAlign: "center",
+          background: "linear-gradient(135deg, rgba(80,0,0,0.8) 0%, rgba(140,20,20,0.8) 100%)",
+          border: "3px solid rgba(255,80,80,0.7)",
+          borderRadius: 28,
+          padding: "40px 60px",
+          maxWidth: "90%",
+        }}
+      >
+        <div style={{ fontSize: 72, marginBottom: 16 }}>⚠️</div>
+        <div style={{ fontSize: 60, fontWeight: "900", color: "#ff6b6b", marginBottom: 12 }}>
+          「カービング」
         </div>
-        <div style={{ background: "rgba(255,255,255,0.05)", padding: "50px 40px", borderRadius: 30, border: "3px solid #99f6ff", opacity: spr(10), transform: `translateY(${(1-spr(10))*50}px)` }}>
-          <div style={{ fontSize: 55, color: "#99f6ff", fontWeight: "bold", marginBottom: 15 }}>🧪 科学的調査の自由</div>
-          <div style={{ fontSize: 40, color: "white", lineHeight: 1.4 }}>国際協力とデータの公開を推進</div>
+        <div style={{ fontSize: 44, color: "#fff", lineHeight: 1.5 }}>
+          突然バランスを崩して<br />転覆する現象
         </div>
       </div>
     </div>
   );
 };
 
-// Slide 3: Prohibited
-const Prohibited: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) => {
-  const spr = (d: number) => spring({ frame, fps, delay: d, config: { damping: 200 } });
+// Slide 2: 転覆の威力
+const SlidePower: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) => {
+  const spr = (delay: number) => spring({ frame, fps, delay, config: { damping: 200 } });
+  const items = [
+    { icon: "🌊", text: "巨大な波が発生" },
+    { icon: "🚢", text: "船が一瞬で飲み込まれる" },
+    { icon: "🧊", text: "氷塊が高速で飛散" },
+  ];
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 80, width: "100%" }}>
-      <div style={{ fontSize: 90, fontWeight: "bold", color: "#ff4d4d" }}>禁止事項</div>
-      <div style={{ width: "90%", background: "rgba(255,255,255,0.05)", borderRadius: 30, padding: "20px 0" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", color: "white", fontSize: 45 }}>
-          <tbody>
-            {["軍事基地の設営", "核実験の実施", "放射性廃棄物の処分"].map((item, i) => (
-              <tr key={item} style={{ borderBottom: i < 2 ? "2px solid rgba(255,255,255,0.1)" : "none", opacity: spr(i * 5) }}>
-                <td style={{ padding: "40px 0 40px 40px", color: "#ff4d4d", fontSize: 60, width: 100 }}>❌</td>
-                <td style={{ padding: "40px 40px 40px 20px", fontWeight: "bold" }}>{item}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div style={{ background: "rgba(255,77,77,0.15)", padding: "30px 60px", borderRadius: 20, border: "2px solid #ff4d4d", opacity: spr(20) }}>
-        <div style={{ fontSize: 40, textAlign: "center", color: "#ff4d4d", fontWeight: "bold" }}>※領土権の主張を凍結</div>
-      </div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        width: "100%",
+        height: "100%",
+        paddingBottom: 120,
+        gap: 28,
+      }}
+    >
+      {items.map((item, i) => (
+        <div
+          key={i}
+          style={{
+            opacity: spr(i * 8),
+            transform: `translateX(${interpolate(spr(i * 8), [0, 1], [-80, 0])}px)`,
+            display: "flex",
+            alignItems: "center",
+            gap: 30,
+            background: "rgba(0,20,50,0.85)",
+            border: "2px solid rgba(100,200,255,0.4)",
+            borderRadius: 20,
+            padding: "30px 50px",
+            width: "88%",
+          }}
+        >
+          <span style={{ fontSize: 64 }}>{item.icon}</span>
+          <span style={{ fontSize: 50, color: "#e0f4ff", fontWeight: "700" }}>{item.text}</span>
+        </div>
+      ))}
     </div>
   );
 };
 
-// Slide 4: Protection
-const Protection: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) => {
+// Slide 3: 水中の隠れた危険
+const SlideHidden: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) => {
   const spr = spring({ frame, fps, config: { damping: 200 } });
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 60 }}>
-       <div style={{ position: "relative", width: 400, height: 400 }}>
-         {/* Simple Antarctica Circle */}
-         <div style={{ position: "absolute", width: 400, height: 400, border: "8px solid #99f6ff", borderRadius: "50%", opacity: spr }} />
-         <div style={{ position: "absolute", width: 300, height: 300, background: "white", borderRadius: "50%", left: 50, top: 50, opacity: spr * 0.8 }} />
-         <div style={{ position: "absolute", fontSize: 100, width: "100%", textAlign: "center", top: 150, left: 0 }}>🌏</div>
-       </div>
-       <div style={{ textAlign: "center", opacity: spr }}>
-         <div style={{ fontSize: 70, fontWeight: "bold", color: "white" }}>環境保護の拠点</div>
-         <div style={{ fontSize: 40, color: "#99f6ff", marginTop: 20 }}>未来の科学と自然のために</div>
-       </div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        width: "100%",
+        height: "100%",
+        paddingBottom: 130,
+      }}
+    >
+      <div
+        style={{
+          opacity: spr,
+          transform: `translateY(${interpolate(spr, [0, 1], [50, 0])}px)`,
+          textAlign: "center",
+          background: "linear-gradient(160deg, rgba(0,30,70,0.9) 0%, rgba(0,60,120,0.9) 100%)",
+          border: "3px solid rgba(77,232,255,0.5)",
+          borderRadius: 28,
+          padding: "50px 60px",
+          width: "88%",
+        }}
+      >
+        <div style={{ fontSize: 70, marginBottom: 20 }}>🔱</div>
+        <div style={{ fontSize: 52, fontWeight: "900", color: "#4de8ff", marginBottom: 18 }}>
+          水中に潜む鋭い氷
+        </div>
+        <div style={{ fontSize: 42, color: "#cceeff", lineHeight: 1.6 }}>
+          目には見えない突起が<br />船体を即座に貫通する
+        </div>
+      </div>
     </div>
   );
 };
 
+// Slide 4: タイタニック
+const SlideTitanic: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) => {
+  const spr = spring({ frame, fps, config: { damping: 200 } });
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        width: "100%",
+        height: "100%",
+        paddingBottom: 130,
+      }}
+    >
+      <div
+        style={{
+          opacity: spr,
+          transform: `scale(${interpolate(spr, [0, 1], [0.88, 1])})`,
+          textAlign: "center",
+          background: "rgba(10,0,30,0.88)",
+          border: "3px solid rgba(255,180,0,0.6)",
+          borderRadius: 28,
+          padding: "50px 60px",
+          width: "88%",
+        }}
+      >
+        <div style={{ fontSize: 70, marginBottom: 20 }}>🚢</div>
+        <div style={{ fontSize: 60, fontWeight: "900", color: "#ffd700", marginBottom: 16 }}>
+          タイタニック号
+        </div>
+        <div style={{ fontSize: 42, color: "#ffe8a0", lineHeight: 1.6 }}>
+          氷山の「見えない部分」に<br />衝突して沈没
+        </div>
+        <div
+          style={{
+            marginTop: 28,
+            background: "rgba(255,200,0,0.15)",
+            borderRadius: 16,
+            padding: "18px 30px",
+            fontSize: 38,
+            color: "#ffc",
+          }}
+        >
+          1912年の歴史的惨事
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Slide 5: 専門家の警告
+const SlideWarning: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) => {
+  const spr = (delay: number) => spring({ frame, fps, delay, config: { damping: 200 } });
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        width: "100%",
+        height: "100%",
+        paddingBottom: 120,
+        gap: 24,
+      }}
+    >
+      <div
+        style={{
+          opacity: spr(0),
+          textAlign: "center",
+          background: "rgba(80,0,0,0.85)",
+          border: "3px solid #ff4444",
+          borderRadius: 24,
+          padding: "36px 56px",
+          width: "88%",
+        }}
+      >
+        <div style={{ fontSize: 68, marginBottom: 16 }}>🚨</div>
+        <div style={{ fontSize: 56, fontWeight: "900", color: "#ff6666", marginBottom: 12 }}>
+          専門家の厳重警告
+        </div>
+        <div style={{ fontSize: 42, color: "#ffcccc", lineHeight: 1.6 }}>
+          南極観光でも必ず<br />「安全距離」を保つこと
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Slide 6: まとめ
+const SlideSummary: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) => {
+  const spr = spring({ frame, fps, config: { damping: 200 } });
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        width: "100%",
+        height: "100%",
+        paddingBottom: 130,
+      }}
+    >
+      <div
+        style={{
+          opacity: spr,
+          transform: `translateY(${interpolate(spr, [0, 1], [40, 0])}px)`,
+          textAlign: "center",
+          background: "linear-gradient(160deg, rgba(0,50,40,0.9) 0%, rgba(0,100,80,0.9) 100%)",
+          border: "3px solid rgba(0,255,180,0.5)",
+          borderRadius: 28,
+          padding: "50px 60px",
+          width: "88%",
+        }}
+      >
+        <div style={{ fontSize: 70, marginBottom: 20 }}>🌊✨</div>
+        <div style={{ fontSize: 52, fontWeight: "900", color: "#00ffba", marginBottom: 20 }}>
+          美しさと危険は表裏一体
+        </div>
+        <div style={{ fontSize: 42, color: "#ccfff0", lineHeight: 1.7 }}>
+          氷山は遠くから<br />眺めるのが最善
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// -------------------------------------------------------
+// Slide mapping: index → component + image
+// -------------------------------------------------------
+const SLIDES = [
+  { Component: SlideTitle, imageIndex: 1 },
+  { Component: SlideCalving, imageIndex: 2 },
+  { Component: SlidePower, imageIndex: 2 },
+  { Component: SlideHidden, imageIndex: 1 },
+  { Component: SlideTitanic, imageIndex: 3 },
+  { Component: SlideWarning, imageIndex: 4 },
+  { Component: SlideSummary, imageIndex: 5 },
+];
+
+
+// -------------------------------------------------------
+// Main component (固定タイミング・テロップなし)
+// -------------------------------------------------------
+
+// 総尺（frames）と1スライドあたりの尺を定数で管理
+// Root.tsx の durationInFrames に合わせて更新すること
+const TOTAL_DURATION_FRAMES = 1496; // 春日部つむぎの音声に基づき更新 (48.85s * 30 + 30)
+const SLIDE_DURATION = Math.floor(TOTAL_DURATION_FRAMES / SLIDES.length);
+
 export const CaptionedVideo: React.FC = () => {
-  const [captions, setCaptions] = useState<Caption[] | null>(null);
-  const { delayRender, continueRender, cancelRender } = useDelayRender();
-  const [handle] = useState(() => delayRender());
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
 
-  const fetchCaptions = useCallback(async () => {
-    try {
-      const response = await fetch(staticFile("audio/story.json"));
-      const data = await response.json();
-      setCaptions(data);
-      continueRender(handle);
-    } catch (e) {
-      cancelRender(e as Error);
-    }
-  }, [continueRender, cancelRender, handle]);
-
-  useEffect(() => {
-    fetchCaptions();
-  }, [fetchCaptions]);
-
-  const { pages } = useMemo(() => {
-    if (!captions) return { pages: [] };
-    const pageData: { startMs: number; endMs: number }[] = [];
-    let currentStartMs = 0;
-    
-    captions.forEach((cap, i) => {
-      if (i === 0) currentStartMs = cap.startMs;
-      
-      const isPeriod = cap.text.includes("。");
-
-      if (isPeriod || i === captions.length - 1) {
-        // Prevent creating tiny pages or too many pages
-        if (cap.endMs - currentStartMs > 3000 || i === captions.length - 1) {
-          pageData.push({ startMs: currentStartMs, endMs: cap.endMs });
-          currentStartMs = cap.endMs;
-        }
-      }
-    });
-    
-    return { pages: pageData };
-  }, [captions]);
-
-
-  if (!captions || pages.length === 0) return null;
-
   return (
-    <AbsoluteFill style={{ background: "#050a10" }}>
+    <AbsoluteFill style={{ background: "#020d1a" }}>
       <Audio src={staticFile("audio/story.mp3")} />
-      {pages.map((page, index) => {
-        const startFrame = (page.startMs / 1000) * fps;
-        const endFrame = (page.endMs / 1000) * fps;
-        const localFrame = frame - Math.round(startFrame);
-        const opacity = interpolate(localFrame, [0, 10], [0, 1], { extrapolateRight: "clamp" });
+
+      {SLIDES.map(({ Component, imageIndex }, index) => {
+        const startFrame = index * SLIDE_DURATION;
+        // 最後のスライドは残り全フレームを使う
+        const durationFrames =
+          index === SLIDES.length - 1
+            ? TOTAL_DURATION_FRAMES - startFrame
+            : SLIDE_DURATION;
+        const localFrame = frame - startFrame;
+        const opacity = interpolate(localFrame, [0, 8], [0, 1], { extrapolateRight: "clamp" });
 
         return (
-          <Sequence key={index} from={Math.round(startFrame)} durationInFrames={Math.round(endFrame - startFrame) + 1}>
-            <AbsoluteFill style={{ display: "flex", justifyContent: "center", alignItems: "center", opacity }}>
-               {index === 0 && <Timeline frame={localFrame} fps={fps} />}
-               {index === 1 && <Purpose frame={localFrame} fps={fps} />}
-               {index === 2 && <Prohibited frame={localFrame} fps={fps} />}
-               {index === 3 && <Protection frame={localFrame} fps={fps} />}
+          <Sequence key={index} from={startFrame} durationInFrames={durationFrames}>
+            <AbsoluteFill style={{ opacity }}>
+              {/* 背景画像 */}
+              <AbsoluteFill>
+                <Img
+                  src={staticFile(`images/${imageIndex}.png`)}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+                {/* 暗めのオーバーレイ */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background:
+                      "linear-gradient(to bottom, rgba(2,10,25,0.45) 0%, rgba(2,10,25,0.70) 60%, rgba(2,10,25,0.88) 100%)",
+                  }}
+                />
+              </AbsoluteFill>
+
+              {/* タイトルバー */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  padding: "40px 50px 30px",
+                  background: "linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%)",
+                  fontSize: 36,
+                  color: "rgba(150,220,255,0.9)",
+                  fontWeight: "600",
+                  textAlign: "center",
+                }}
+              >
+                🧊 南極で氷山に近づいてはいけない理由
+              </div>
+
+              {/* スライドコンテンツ */}
+              <AbsoluteFill>
+                <Component frame={localFrame} fps={fps} />
+              </AbsoluteFill>
             </AbsoluteFill>
           </Sequence>
         );
@@ -173,7 +410,3 @@ export const CaptionedVideo: React.FC = () => {
     </AbsoluteFill>
   );
 };
-
-
-
-

@@ -64,6 +64,14 @@ durations_output.txt
 test.mp3
 
 # -------------------------------------------------------
+# User-generated specific video source code & components (Push不要)
+# -------------------------------------------------------
+src/CaptionedVideo.tsx
+src/CaptionPage.tsx
+src/CombinedCM.tsx
+src/SoraBye.tsx
+
+# -------------------------------------------------------
 # scripts/ 内の自動生成・環境依存スクリプト（Push不要）
 # -------------------------------------------------------
 # ワークフローで自動生成されるスクリプト

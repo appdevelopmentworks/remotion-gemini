@@ -18,7 +18,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="CaptionedVideo"
         component={CaptionedVideo}
-        durationInFrames={1200} // Updated based on story.json (total ~39s + buffer)
+        durationInFrames={1496} // 氷山動画 (春日部つむぎ): duration=48.85s → 48.85*30+30Buffer = 1496f
         fps={30}
         width={1080}
         height={1920} // Vertical video format
