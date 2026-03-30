@@ -30,6 +30,7 @@
     "build": "remotion bundle",
     "render-cm": "remotion render CombinedCM out/combined_cm.mp4",
     "render-sorabye": "remotion render SoraBye out/sorabye.mp4",
+    "render-nankyoku": "remotion render NankyokuFudousan out/nankyokufudousan.mp4",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"
   },

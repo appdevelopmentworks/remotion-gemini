@@ -11,6 +11,11 @@ import {
   soraByeCalculateMetadata,
   soraByeDefaultProps,
 } from "./SoraBye";
+import {
+  NankyokuFudousan,
+  nankyokuCalculateMetadata,
+  nankyokuDefaultProps,
+} from "./NankyokuFudousan";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -42,6 +47,16 @@ export const RemotionRoot: React.FC = () => {
         height={720}
         defaultProps={soraByeDefaultProps}
         calculateMetadata={soraByeCalculateMetadata}
+      />
+      <Composition
+        id="NankyokuFudousan"
+        component={NankyokuFudousan}
+        durationInFrames={1}
+        fps={30}
+        width={1280}
+        height={720}
+        defaultProps={nankyokuDefaultProps}
+        calculateMetadata={nankyokuCalculateMetadata}
       />
     </>
   );

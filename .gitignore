@@ -70,6 +70,7 @@ src/CaptionedVideo.tsx
 src/CaptionPage.tsx
 src/CombinedCM.tsx
 src/SoraBye.tsx
+src/NankyokuFudousan.tsx
 
 # -------------------------------------------------------
 # scripts/ 内の自動生成・環境依存スクリプト（Push不要）
