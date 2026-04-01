@@ -66,11 +66,7 @@ test.mp3
 # -------------------------------------------------------
 # User-generated specific video source code & components (Push不要)
 # -------------------------------------------------------
-src/CaptionedVideo.tsx
-src/CaptionPage.tsx
-src/CombinedCM.tsx
-src/SoraBye.tsx
-src/NankyokuFudousan.tsx
+# Local-only Remotion source files now live in src/private/
 
 # -------------------------------------------------------
 # scripts/ 内の自動生成・環境依存スクリプト（Push不要）
