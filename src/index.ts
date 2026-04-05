@@ -6,40 +6,16 @@ type RootModule = {
   RemotionRoot?: FunctionComponent;
 };
 
-type RequireContext = {
-  keys: () => string[];
+declare const require: {
   (id: string): RootModule;
 };
 
-declare const require: {
-  context?: (
-    directory: string,
-    useSubdirectories?: boolean,
-    regExp?: RegExp,
-  ) => RequireContext;
-};
-
 const loadRoot = (): FunctionComponent => {
-  const privateRootContext = require.context?.(
-    "./private",
-    false,
-    /^\.\/Root\.tsx$/,
-  );
-
-  if (!privateRootContext) {
+  try {
+    return require("./private/Root").RemotionRoot ?? PublicRemotionRoot;
+  } catch {
     return PublicRemotionRoot;
   }
-
-  const [privateRootModulePath] = privateRootContext.keys();
-
-  if (!privateRootModulePath) {
-    return PublicRemotionRoot;
-  }
-
-  return (
-    privateRootContext(privateRootModulePath).RemotionRoot ??
-    PublicRemotionRoot
-  );
 };
 
 registerRoot(loadRoot());

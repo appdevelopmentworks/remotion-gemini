@@ -28,6 +28,8 @@
   "scripts": {
     "dev": "remotion studio",
     "build": "remotion bundle",
+    "generate-story-audio": "node scripts/generate_story_audio.mjs",
+    "render-captioned": "remotion render CaptionedVideo out/captioned-video.mp4",
     "render-cm": "remotion render CombinedCM out/combined_cm.mp4",
     "render-maguro": "remotion render MaguroSleepShort out/maguro-nemuranai.mp4",
     "render-sorabye": "remotion render SoraBye out/sorabye.mp4",
