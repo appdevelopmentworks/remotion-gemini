@@ -80,3 +80,11 @@ scripts/copy_images.mjs
 
 # TTS テスト用スクリプト
 scripts/test_tts.mjs
+
+# -------------------------------------------------------
+# 動画生成一時ファイル・中間分析結果
+# -------------------------------------------------------
+temp_meta.mjs
+video_durations.json
+scripts/get_video_info.mjs
+scripts/temp_*.mjs
