@@ -88,3 +88,5 @@ temp_meta.mjs
 video_durations.json
 scripts/get_video_info.mjs
 scripts/temp_*.mjs
+
+tsc_error.txt
