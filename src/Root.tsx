@@ -1,36 +1,24 @@
 import "./index.css";
 import { Composition } from "remotion";
 import {
-  COMPOSITION_FPS,
-  COMPOSITION_LANDSCAPE_HEIGHT,
-  COMPOSITION_LANDSCAPE_ID,
-  COMPOSITION_LANDSCAPE_WIDTH,
-  COMPOSITION_PORTRAIT_HEIGHT,
-  COMPOSITION_PORTRAIT_ID,
-  COMPOSITION_PORTRAIT_WIDTH,
-  MyComposition,
-  MyLandscapeComposition,
-  TOTAL_DURATION_IN_FRAMES,
-} from "./Composition";
+  YoutubeShortComposition,
+  YOUTUBE_SHORT_DURATION_IN_FRAMES,
+  YOUTUBE_SHORT_FPS,
+  YOUTUBE_SHORT_HEIGHT,
+  YOUTUBE_SHORT_ID,
+  YOUTUBE_SHORT_WIDTH,
+} from "./YoutubeShortComposition";
 
 export const RemotionRoot = () => {
   return (
     <>
       <Composition
-        id={COMPOSITION_PORTRAIT_ID}
-        component={MyComposition}
-        durationInFrames={TOTAL_DURATION_IN_FRAMES}
-        fps={COMPOSITION_FPS}
-        width={COMPOSITION_PORTRAIT_WIDTH}
-        height={COMPOSITION_PORTRAIT_HEIGHT}
-      />
-      <Composition
-        id={COMPOSITION_LANDSCAPE_ID}
-        component={MyLandscapeComposition}
-        durationInFrames={TOTAL_DURATION_IN_FRAMES}
-        fps={COMPOSITION_FPS}
-        width={COMPOSITION_LANDSCAPE_WIDTH}
-        height={COMPOSITION_LANDSCAPE_HEIGHT}
+        id={YOUTUBE_SHORT_ID}
+        component={YoutubeShortComposition}
+        durationInFrames={YOUTUBE_SHORT_DURATION_IN_FRAMES}
+        fps={YOUTUBE_SHORT_FPS}
+        width={YOUTUBE_SHORT_WIDTH}
+        height={YOUTUBE_SHORT_HEIGHT}
       />
     </>
   );
