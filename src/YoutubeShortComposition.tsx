@@ -9,7 +9,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-// @ts-ignore
+// @ts-expect-error JSON asset import is handled by the Remotion bundler.
 import storyMeta from "../public/audio/story-meta.json";
 
 export const YOUTUBE_SHORT_ID = "NASA-Orion-Parachute";
